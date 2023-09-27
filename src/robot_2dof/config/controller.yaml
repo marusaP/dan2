@@ -1,0 +1,17 @@
+MOJROBOT:
+  # publish all joint states:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 10
+  joint_controller: #Add this new line
+    type: position_controllers/JointTrajectoryController #Add this new line
+    joints: #Add this new line
+    - prvi_sklep #Add this new line
+    - drugi_sklep #Add this new line
+
+MOJROBOT/gazebo_ros_control/pid_gains:
+  prvi_sklep: {p: 1000, i: 0,  d: 100}
+  drugi_sklep: {p: 1000, i: 0,  d: 100}
+
+
+  

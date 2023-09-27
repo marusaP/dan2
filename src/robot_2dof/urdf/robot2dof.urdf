@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<robot name="2dof_robot">
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+    <material name="Blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+    </material> 
+
+    <material name="Red">
+        <color rgba="1 0 0 1.0"/>
+    </material>
+
+    <material name="Black">
+        <color rgba="0 0 0 1.0"/>
+    </material>    
+
+   <link name="world"/>
+
+   <!-- BASE LINK-->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.16 0.16 1.0"/>
+            </geometry>
+            <material name="White"/>
+            <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.16 0.16 1.0"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <inertial>
+            <mass value="25"/>
+            <origin xyz="0.0 0.0 0.5"/>
+            <inertia ixx="8.741" iyy="8.741" izz="0.4367" ixy="-0.1637" ixz="-0.1023"  iyz="-0.1023"/>
+        </inertial>
+    </link>
+
+    <joint name="fixed_base" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+
+    <!-- PRVI SEGMENT-->
+    <link name="prvi_segment">
+        <visual>
+            <geometry>
+                <cylinder radius="0.04" length="0.5"/>
+            </geometry>
+            <material name="Red"/>
+            <origin xyz="0.12 0.0 0.21" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.04" length="0.5"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.21" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <inertial>
+            <mass value="2.5"/>
+            <origin xyz="0.0 0.0 0.25"/>
+            <inertia ixx="0.2091" iyy="0.2091" izz="0.002" ixy="0.0" ixz="0.0"  iyz="0.0"/>
+        </inertial>
+    </link>
+
+    <joint name="prvi_sklep" type="continuous">
+        <axis xyz="1 0 0"/>
+        <parent link="base_link"/>
+        <child link="prvi_segment"/>
+        <origin xyz="0.0 0 0.92" rpy="-1.5707 0 0"/>
+    </joint>
+
+     <!-- DRUGI SEGMENT-->
+    <link name="drugi_segment">
+        <visual>
+            <geometry>
+                <cylinder radius="0.04" length="0.5"/>
+            </geometry>
+            <material name="Blue"/>
+            <origin xyz="-0.08 0.0 0.21" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.04" length="0.5"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.21" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <inertial>
+            <mass value="2.5"/>
+            <origin xyz="0.0 0.0 0.25"/>
+            <inertia ixx="0.2091" iyy="0.2091" izz="0.002" ixy="0.0" ixz="0.0"  iyz="0.0"/>
+        </inertial>
+    </link>
+
+    <joint name="drugi_sklep" type="continuous">
+        <axis xyz="1 0 0"/>
+        <parent link="prvi_segment"/>
+        <child link="drugi_segment"/>
+        <origin xyz="0.12 0 0.42" rpy="0 0 0"/>
+    </joint>
+
+        <!-- TCP SEGMENT-->
+    <link name="TCP_segment">
+        <visual>
+            <geometry>
+                <sphere radius="0.02"/>
+            </geometry>
+            <material name="Red"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="0.02"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <inertial>
+            <mass value="0.034"/>
+            <origin xyz="0.0 0.0 0.0"/>
+            <inertia ixx="0.0000054" iyy="0.0000054" izz="0.0000054" ixy="0.0" ixz="0.0"  iyz="0.0"/>
+        </inertial>
+    </link>
+
+    <joint name="TCP_sklep" type="fixed">
+        <parent link="drugi_segment"/>
+        <child link="TCP_segment"/>
+        <origin xyz="-0.08 0 0.46" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo reference = "prvi_segment">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- PRENOSI -->
+    <transmission name="trans1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="prvi_sklep">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor1">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="trans2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="drugi_sklep">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor2">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo>
+        <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+            <jointName>prvi_sklep, drugi_sklep</jointName>
+        </plugin>
+    </gazebo> 
+
+    <gazebo>
+        <plugin name="control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/MOJROBOT</robotNamespace>
+        </plugin>
+    </gazebo>
+
+</robot>
