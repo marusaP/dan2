@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur10e_robot">
+
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
+  <xacro:include filename="$(find fe_tf)/urdf/stl_link_macro.xacro"/>
+  <xacro:include filename="$(find fe_tf)/urdf/cube_link.xacro"/>
+
+  <!-- Execute the macros -->
+  <xacro:ur10e_robot prefix="" />
+  <xacro:add_cube link_name="cube" x="1.5" attach_to="base_link" box_size="0.2"/>
+
+  <xacro:place_stl link_name="orodje" stl_location='package://fe_tf/urdf/visual/podstavek.STL' attach_to="tool0"/>
+
+  <xacro:place_stl link_name="podstavek" x="1.0" stl_location='package://fe_tf/urdf/visual/podstavek.STL' attach_to="base_link"/>
+
+
+</robot>

@@ -1,0 +1,17 @@
+<robot name="simple" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="world"/>
+    <link name="frame_1"/>
+    <link name="frame_2"/>
+    <joint name="world_frame_1_joint" type="fixed">
+        <parent link="world"/>
+        <origin xyz="0.0 0.0 1.0" rpy="0.0 0.0 0.0"/>
+        <child link="frame_1"/>
+    </joint>
+    <joint name="frame_1_frame_2_joint" type="revolute">
+        <parent link="frame_1"/>
+        <origin xyz="1.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <axis xyz="0 0 1" />
+        <child link="frame_2"/>
+        <limit lower="-3.14" upper="3.14" effort="1" velocity="1"/>
+    </joint>
+</robot>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+
+<robot name="simple" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="place_stl" params="link_name stl_location x:=0 y:=0 z:=0 rr:=0 pp:=0 yy:=0 attach_to:=base_link">
+        <link name="${link_name}">
+            <visual>
+                <geometry>
+                    <mesh filename="${stl_location}"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="${stl_location}"/>
+                </geometry>
+            </collision>
+        </link>
+        <joint name="${link_name}_joint" type="fixed">
+            <parent link="${attach_to}"/>
+            <origin xyz="${x} ${y} ${z}" rpy="${rr} ${pp} ${yy}"/>
+            <child link="${link_name}"/>
+        </joint>
+    </xacro:macro>
+</robot>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load the robot description to the parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find fe_tf)/urdf/ur10e_demo.xacro'"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+</launch>
+
